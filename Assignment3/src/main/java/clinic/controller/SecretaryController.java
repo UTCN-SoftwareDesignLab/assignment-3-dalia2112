@@ -33,21 +33,37 @@ public class SecretaryController {
     }
 
 
-    @RequestMapping(value = "/secretaryOp", params = "addPatient", method = RequestMethod.POST)
+    // ADD PATIENT
+    @RequestMapping(value = "/secretaryOp", params = "addP", method = RequestMethod.POST)
     public String addPatient(Model model, @RequestParam String name, @RequestParam long icn, @RequestParam long pnc, @RequestParam String bday, @RequestParam String addr) {
 
-        LocalDate bd=LocalDate.parse(bday);
-        Patient patient=new PatientBuilder()
-                .setName(name)
-                .setId_card_nr(icn)
-                .setPers_num_code(pnc)
-                .setBirthday(bd)
-                .setAddress(addr)
-                .build();
-        Notification<Boolean> notification=patientService.addPatient(patient);
+        Notification<Boolean> notification = patientService.addPatient(name, icn, pnc, bday, addr);
+        if (notification.getResult()) {
+            model.addAttribute("updUSucc", true);
+            model.addAttribute("updMessage2", "Patient added successfully!");
+        } else {
+            model.addAttribute("updUErr", true);
+            model.addAttribute("updMessage", notification.getFormattedErrors());
+        }
         return "secretaryOp";
     }
 
+    //UPDATE PATIENT
+    @RequestMapping(value = "/secretaryOp", params = "update", method = RequestMethod.POST)
+    public String updatePatient(Model model, @RequestParam long id, @RequestParam String name, @RequestParam long icn, @RequestParam long pnc, @RequestParam String bday, @RequestParam String addr) {
+
+        Notification<Boolean> notification = patientService.updatePatient(id, name, icn, pnc, bday, addr);
+        if (notification.getResult()) {
+            model.addAttribute("updUSucc", true);
+            model.addAttribute("updMessage2", "Patient updated successfully!");
+        } else {
+            model.addAttribute("updUErr", true);
+            model.addAttribute("updMessage", notification.getFormattedErrors());
+        }
+        return "secretaryOp";
+    }
+
+    //VIEW PATIENTS
     @RequestMapping(value = "/patientView", params = "viewPatients", method = RequestMethod.GET)
     public String findAllPatients(Model model) {
         final List<Patient> items = patientService.findAll();
@@ -57,6 +73,65 @@ public class SecretaryController {
 
 
     /********************CONSULTATIONS********************/
+
+    // ADD CONSULTATION
+    @RequestMapping(value = "/secretaryOp", params = "addCons", method = RequestMethod.POST)
+    public String addConsultation(Model model, @RequestParam String cday, @RequestParam long idPat, @RequestParam long idDoc) {
+
+        if (!consultationService.doctorWorksOnDate(idDoc, cday)) {
+            model.addAttribute("conErr", true);
+            model.addAttribute("coneMsg", "Busy doctor on that day!");
+            return "secretaryOp";
+        }
+        Notification<Boolean> notification = consultationService.addConsultation(cday, idPat, idDoc);
+        if (notification.getResult()) {
+                model.addAttribute("conSucc", true);
+                model.addAttribute("consMsg", "Consultation added successfully!");
+                return "secretaryOp";
+        }
+        model.addAttribute("conErr", true);
+        model.addAttribute("coneMsg", notification.getFormattedErrors());
+
+        return "secretaryOp";
+    }
+
+    //UPDATE CONSULTATION
+    @RequestMapping(value = "/secretaryOp", params = "updCon", method = RequestMethod.POST)
+    public String updateConsultation(Model model, @RequestParam long idCon, @RequestParam String cday, @RequestParam long idPat, @RequestParam long idDoc) {
+
+        Notification<Boolean> notification = consultationService.updateConsultation(idCon,cday,idPat,idDoc);
+        if (notification.getResult()) {
+            model.addAttribute("conSucc", true);
+            model.addAttribute("consMsg", "Consultation updated successfully!");
+        } else {
+            model.addAttribute("conErr", true);
+            model.addAttribute("coneMsg", notification.getFormattedErrors());
+        }
+        return "secretaryOp";
+    }
+
+    //DELETE CONSULTATION
+    @RequestMapping(value = "/secretaryOp", params = "delCon", method = RequestMethod.POST)
+    public String deleteConsultation(Model model, @RequestParam long idCon) {
+
+        Notification<Boolean> notification = consultationService.deleteConsultation(idCon);
+        if (notification.getResult()) {
+            model.addAttribute("conSucc", true);
+            model.addAttribute("consMsg", "Consultation deleted successfully!");
+        } else {
+            model.addAttribute("conErr", true);
+            model.addAttribute("coneMsg", notification.getFormattedErrors());
+        }
+        return "secretaryOp";
+    }
+
+    //VIEW CONSULTATIONS
+    @RequestMapping(value = "/consultView", params = "viewConsultations", method = RequestMethod.GET)
+    public String showConsultations(Model model) {
+        final List<Consultation> items = consultationService.findAll();
+        model.addAttribute("consultations", items);
+        return "secretaryOp";
+    }
 
 
 }

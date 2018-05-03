@@ -28,7 +28,15 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Notification<Boolean> addPatient(Patient patient) {
+    public Notification<Boolean> addPatient(String name, long icn, long pnc, String bday, String address) {
+        LocalDate bd = LocalDate.parse(bday);
+        Patient patient = new PatientBuilder()
+                .setName(name)
+                .setId_card_nr(icn)
+                .setPers_num_code(pnc)
+                .setBirthday(bd)
+                .setAddress(address)
+                .build();
         Notification<Boolean> notification = new Notification<>();
         PatientValidator validator = new PatientValidator(patient);
         if (validator.validate()) {
@@ -42,7 +50,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Notification<Boolean> updatePatient(long id, String name, long icn, long pnc, LocalDate bday, String address) {
+    public Notification<Boolean> updatePatient(long id, String name, long icn, long pnc, String bday, String address) {
+        LocalDate date = LocalDate.parse(bday);
         Notification<Boolean> notification = new Notification<>();
         if (patientRepository.findById(id) != null) {
             Patient patient = new PatientBuilder()
@@ -50,7 +59,7 @@ public class PatientServiceImpl implements PatientService {
                     .setName(name)
                     .setId_card_nr(icn)
                     .setPers_num_code(pnc)
-                    .setBirthday(bday)
+                    .setBirthday(date)
                     .setAddress(address)
                     .build();
             PatientValidator validator = new PatientValidator(patient);

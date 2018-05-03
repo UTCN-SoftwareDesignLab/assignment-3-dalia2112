@@ -12,12 +12,14 @@ public class Consultation {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name="patient_id")
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User doctor;
+
+    private String details;
 
     public long getId() {
         return id;
@@ -49,5 +51,13 @@ public class Consultation {
 
     public void setDoctor(User doctor) {
         this.doctor = doctor;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 }

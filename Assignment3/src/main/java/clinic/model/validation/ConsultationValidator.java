@@ -1,6 +1,8 @@
 package clinic.model.validation;
 
 import clinic.model.Consultation;
+import clinic.model.Patient;
+import clinic.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,11 +15,13 @@ public class ConsultationValidator {
 
     public ConsultationValidator(Consultation consultation) {
         this.consultation = consultation;
-        errors=new ArrayList<>();
+        errors = new ArrayList<>();
     }
 
     public boolean validate() {
         validateDate(consultation.getDate());
+        validateDoctor(consultation.getDoctor());
+        validatePatient(consultation.getPatient());
         return errors.isEmpty();
     }
 
@@ -25,9 +29,25 @@ public class ConsultationValidator {
         return errors;
     }
 
-    private void validateDate(LocalDate date){
-        if(LocalDate.now().getYear()<date.getYear())
+    private void validateDate(LocalDate date) {
+        if (LocalDate.now().getYear() < date.getYear())
             errors.add("Invalid date! Appointments must be done in the future!");
+    }
+
+    private void validateDoctor(User doctor) {
+        if (doctor == null) {
+            errors.add("The doctor does not exist!");
+            return;
+        }
+        if (!doctor.getRole().equalsIgnoreCase("doctor")) {
+            errors.add("The doctor is not really a doctor..");
+        }
+    }
+
+    private void validatePatient(Patient patient) {
+        if (patient == null) {
+            errors.add("The patient does not exist!");
+        }
     }
 
 

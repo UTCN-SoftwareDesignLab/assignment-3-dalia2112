@@ -16,4 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByNameAndPassword(String username, String password);
 
     Notification<Boolean> deleteById(long id);
+
 }

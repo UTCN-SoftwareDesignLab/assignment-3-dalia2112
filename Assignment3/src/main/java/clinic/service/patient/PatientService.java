@@ -11,8 +11,11 @@ import java.util.List;
 public interface PatientService {
 
     List<Patient> findAll();
+
     Patient findById(long id);
-    Notification<Boolean> addPatient(Patient patient);
-    Notification<Boolean> updatePatient(long id, String name, long icn, long pnc, LocalDate bday, String address);
+
+    Notification<Boolean> addPatient(String name, long icn, long pnc, String bday, String address);
+
+    Notification<Boolean> updatePatient(long id, String name, long icn, long pnc, String bday, String address);
 
 }

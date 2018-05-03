@@ -1,5 +1,6 @@
 package clinic.service.user;
 
+import clinic.model.Consultation;
 import clinic.model.User;
 import clinic.model.builder.UserBuilder;
 import clinic.model.validation.Notification;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +128,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    public User findByUsername(String username){
+    public User findByUsername(String username) {
         return userRepository.findByName(username);
     }
 
@@ -147,5 +149,4 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(ex);
         }
     }
-
 }

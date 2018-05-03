@@ -71,56 +71,6 @@ public class AdminController {
         return "redirect:/login";
     }
 
-//    /**************REPORTS**************/
-//
-//    @RequestMapping(value = "/book", params = "genReport", method = RequestMethod.POST)
-//    public String generateReportPDF(Model model, @RequestParam String format) {
-//
-//        List<Book> books = bookService.findByQuantity(0);
-//        if (format.equalsIgnoreCase("pdf") || format.equalsIgnoreCase("csv")) {
-//            ReportService reportService = reportFactory.getReport(format);
-//            reportService.generateReport(books);
-//            model.addAttribute("repSucc", true);
-//            model.addAttribute("repSMsc", "Report created successfully!");
-//        } else {
-//            model.addAttribute("repErr", true);
-//            model.addAttribute("repEMsg", "Wrong format (PDF or CSV only)!");
-//        }
-//
-//        return "book";
-//    }
-//
-//
-//    /*********GOOGLE BOOK API*********/
-//
-//    @RequestMapping(value = "/apiBook", method = RequestMethod.GET)
-//    public String showApi() {
-//        return "apiBook";
-//    }
-//
-//    @RequestMapping(value = "/apiBook", params = "srcApi", method = RequestMethod.POST)
-//    public String searchBookApi(Model model, @RequestParam String title) {
-//
-//        List<Book> books = bookApiService.apiBookByTitle(title);
-//        model.addAttribute("bookApi", books);
-//        return "apiBook";
-//    }
-//
-//    @RequestMapping(value = "/apiBook", params = "addApi", method = RequestMethod.POST)
-//    public String addBookApi(Model model, @RequestParam String title, @RequestParam int id) {
-//
-//        Book book = bookApiService.apiBookByTitle(title).get(id);
-//        book.setGenre("SF");
-//        Notification<Boolean> notification = bookService.addBook(book);
-//        if (notification.hasErrors()) {
-//            model.addAttribute("apiadd", true);
-//            model.addAttribute("apiMsg", notification.getFormattedErrors());
-//        } else {
-//            model.addAttribute("apiaddS", true);
-//            model.addAttribute("apiMsg2", "Book added successfully!");
-//        }
-//        return "apiBook";
-//    }
 
 
 }

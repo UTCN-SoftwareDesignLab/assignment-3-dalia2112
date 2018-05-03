@@ -34,6 +34,11 @@ public class ConsultationBuilder {
         return this;
     }
 
+    public ConsultationBuilder setDetails(String details){
+        consultation.setDetails(details);
+        return this;
+    }
+
     public Consultation build(){
         return consultation;
     }
