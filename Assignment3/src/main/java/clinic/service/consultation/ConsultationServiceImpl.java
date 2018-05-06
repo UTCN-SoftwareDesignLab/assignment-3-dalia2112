@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -118,7 +119,7 @@ public class ConsultationServiceImpl implements ConsultationService {
             notification.setResult(false);
             return notification;
         }
-        consultationRepository.delete(id);
+        consultationRepository.deleteById(id);
         notification.setResult(true);
         return notification;
     }
@@ -146,5 +147,45 @@ public class ConsultationServiceImpl implements ConsultationService {
         }
 
         return notification;
+    }
+
+    public Notification<String> checkInPatient(long id){
+        Notification<String> notification=new Notification<>();
+        if (id < 0) {
+            notification.addError("Id must be positive!");
+            notification.setResult("");
+            return notification;
+        }
+        if(patientRepository.findById(id)==null){
+            notification.addError("Id must be positive!");
+            notification.setResult("");
+            return notification;
+        }
+        Patient patient=patientRepository.findById(id);
+        List<Consultation> consultations=consultationRepository.findByDate(LocalDate.now());
+        if(consultations==null){
+            notification.addError("No consultations today!");
+            notification.setResult("");
+            return notification;
+        }
+        for(Consultation consultation:consultations){
+            if(consultation.getPatient().getId()==id){
+                notification.setResult("Patient ("+id+") "+patient.getName()+" has an consultation today!");
+                return notification;
+            }
+        }
+        notification.addError("This patient does not have an appointment today!");
+        notification.setResult("");
+        return notification;
+    }
+
+    public List<Patient> checkedInPatients(){
+        List<Patient> patients=patientRepository.findAll();
+        List<Patient> checkedPatients=new ArrayList<>();
+        for(Patient patient:patients){
+            if(!checkInPatient(patient.getId()).hasErrors())
+                checkedPatients.add(patient);
+        }
+        return checkedPatients;
     }
 }

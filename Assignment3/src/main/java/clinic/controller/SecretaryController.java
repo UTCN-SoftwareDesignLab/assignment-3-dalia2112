@@ -1,5 +1,6 @@
 package clinic.controller;
 
+import clinic.Greeting;
 import clinic.model.Consultation;
 import clinic.model.Patient;
 import clinic.model.builder.PatientBuilder;
@@ -7,6 +8,8 @@ import clinic.model.validation.Notification;
 import clinic.service.consultation.ConsultationService;
 import clinic.service.patient.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,16 +81,16 @@ public class SecretaryController {
     @RequestMapping(value = "/secretaryOp", params = "addCons", method = RequestMethod.POST)
     public String addConsultation(Model model, @RequestParam String cday, @RequestParam long idPat, @RequestParam long idDoc) {
 
-        if (!consultationService.doctorWorksOnDate(idDoc, cday)) {
+        if (consultationService.doctorWorksOnDate(idDoc, cday)) {
             model.addAttribute("conErr", true);
             model.addAttribute("coneMsg", "Busy doctor on that day!");
             return "secretaryOp";
         }
         Notification<Boolean> notification = consultationService.addConsultation(cday, idPat, idDoc);
         if (notification.getResult()) {
-                model.addAttribute("conSucc", true);
-                model.addAttribute("consMsg", "Consultation added successfully!");
-                return "secretaryOp";
+            model.addAttribute("conSucc", true);
+            model.addAttribute("consMsg", "Consultation added successfully!");
+            return "secretaryOp";
         }
         model.addAttribute("conErr", true);
         model.addAttribute("coneMsg", notification.getFormattedErrors());
@@ -99,7 +102,7 @@ public class SecretaryController {
     @RequestMapping(value = "/secretaryOp", params = "updCon", method = RequestMethod.POST)
     public String updateConsultation(Model model, @RequestParam long idCon, @RequestParam String cday, @RequestParam long idPat, @RequestParam long idDoc) {
 
-        Notification<Boolean> notification = consultationService.updateConsultation(idCon,cday,idPat,idDoc);
+        Notification<Boolean> notification = consultationService.updateConsultation(idCon, cday, idPat, idDoc);
         if (notification.getResult()) {
             model.addAttribute("conSucc", true);
             model.addAttribute("consMsg", "Consultation updated successfully!");
@@ -133,5 +136,39 @@ public class SecretaryController {
         return "secretaryOp";
     }
 
+    @RequestMapping(value = "/informDoc", method = RequestMethod.GET)
+    public String showindex() {
+        return "informDoc";
+    }
+
+
+    @MessageMapping("/hi")
+    @SendTo("/topic/greetings")
+    @RequestMapping(value = "/secretaryOp", params = "send", method = RequestMethod.POST)
+    public Greeting checkInPatient() {
+
+        List<Consultation> consultationList=consultationService.findByDate(LocalDate.now());
+
+        String message = consultationList.get(0).getPatient().getName()+" "+consultationList.get(0).getDate();
+        System.out.println(consultationService.checkedInPatients().size());
+        return new Greeting(message);
+    }
+
+//    @RequestMapping(value = "/secretaryOp", params = "checkIn", method = RequestMethod.POST)
+//    public Greeting checkInPatient(Model model, @RequestParam long id) {
+//
+//        Notification<String> notification = consultationService.checkInPatient(id);
+//        String message="";
+//            if (!notification.hasErrors()) {
+//            model.addAttribute("updUSucc", true);
+//            model.addAttribute("updMessage2", "Patient updated successfully!");
+//            message=notification.getResult();
+//        } else {
+//            model.addAttribute("updUErr", true);
+//            model.addAttribute("updMessage", notification.getFormattedErrors());
+//            message=notification.getFormattedErrors();
+//        }
+//        return Gr
+//    }
 
 }

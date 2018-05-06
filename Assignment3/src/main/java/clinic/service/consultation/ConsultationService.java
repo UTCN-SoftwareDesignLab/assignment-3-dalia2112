@@ -1,6 +1,7 @@
 package clinic.service.consultation;
 
 import clinic.model.Consultation;
+import clinic.model.Patient;
 import clinic.model.validation.Notification;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +27,8 @@ public interface ConsultationService {
     Notification<Boolean> deleteConsultation(long id);
 
     Notification<Boolean> addDetails(long id,String details);
+
+    Notification<String> checkInPatient(long id);
+
+    List<Patient> checkedInPatients();
 }
