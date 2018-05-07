@@ -142,7 +142,7 @@ public class SecretaryController {
 
     @MessageMapping("/hi")
     @SendTo("/topic/greetings")
-    @RequestMapping(value = "/secretaryOp",params = "send",method = RequestMethod.POST)
+    @RequestMapping(value = "/secretaryOp",method = RequestMethod.POST)
     public Greeting checkInPatient(String message) {
         message=message.replace("{","");
         message=message.replace("}","");

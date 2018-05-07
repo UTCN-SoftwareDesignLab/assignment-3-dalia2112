@@ -17,6 +17,10 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private PatientRepository patientRepository;
 
+    public PatientServiceImpl(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
+    }
+
     @Override
     public List<Patient> findAll() {
         return patientRepository.findAll();

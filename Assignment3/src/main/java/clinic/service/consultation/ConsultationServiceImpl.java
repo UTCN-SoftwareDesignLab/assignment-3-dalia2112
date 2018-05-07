@@ -28,6 +28,11 @@ public class ConsultationServiceImpl implements ConsultationService {
     @Autowired
     private PatientRepository patientRepository;
 
+    public ConsultationServiceImpl(ConsultationRepository consultationRepository, UserRepository userRepository, PatientRepository patientRepository) {
+        this.consultationRepository = consultationRepository;
+        this.userRepository = userRepository;
+        this.patientRepository = patientRepository;
+    }
 
     @Override
     public List<Consultation> findAll() {

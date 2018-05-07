@@ -30,7 +30,7 @@ public class ConsultationValidator {
     }
 
     private void validateDate(LocalDate date) {
-        if (LocalDate.now().getYear() < date.getYear())
+        if (LocalDate.now().getYear() > date.getYear())
             errors.add("Invalid date! Appointments must be done in the future!");
     }
 
