@@ -3,7 +3,6 @@ package clinic.controller;
 import clinic.Greeting;
 import clinic.model.Consultation;
 import clinic.model.Patient;
-import clinic.model.builder.PatientBuilder;
 import clinic.model.validation.Notification;
 import clinic.service.consultation.ConsultationService;
 import clinic.service.patient.PatientService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -78,7 +76,7 @@ public class SecretaryController {
     /********************CONSULTATIONS********************/
 
     // ADD CONSULTATION
-    @RequestMapping(value = "/secretaryOp", params = "addCons", method = RequestMethod.POST)
+    @RequestMapping(value = "/makeAppointment", method = RequestMethod.GET)
     public String addConsultation(Model model, @RequestParam String cday, @RequestParam long idPat, @RequestParam long idDoc) {
 
         if (consultationService.doctorWorksOnDate(idDoc, cday)) {
@@ -144,31 +142,23 @@ public class SecretaryController {
 
     @MessageMapping("/hi")
     @SendTo("/topic/greetings")
-    @RequestMapping(value = "/secretaryOp", params = "send", method = RequestMethod.POST)
-    public Greeting checkInPatient() {
-
-        List<Consultation> consultationList=consultationService.findByDate(LocalDate.now());
-
-        String message = consultationList.get(0).getPatient().getName()+" "+consultationList.get(0).getDate();
-        System.out.println(consultationService.checkedInPatients().size());
+    @RequestMapping(value = "/secretaryOp",params = "send",method = RequestMethod.POST)
+    public Greeting checkInPatient(String message) {
+        message=message.replace("{","");
+        message=message.replace("}","");
         return new Greeting(message);
     }
 
-//    @RequestMapping(value = "/secretaryOp", params = "checkIn", method = RequestMethod.POST)
-//    public Greeting checkInPatient(Model model, @RequestParam long id) {
+//    @MessageMapping("/hi")
+//    @SendTo("/topic/greetings")
+//    @RequestMapping(value = "/secretaryOp", params = "send", method = RequestMethod.POST)
+//    public Greeting todayPatients() {
 //
-//        Notification<String> notification = consultationService.checkInPatient(id);
-//        String message="";
-//            if (!notification.hasErrors()) {
-//            model.addAttribute("updUSucc", true);
-//            model.addAttribute("updMessage2", "Patient updated successfully!");
-//            message=notification.getResult();
-//        } else {
-//            model.addAttribute("updUErr", true);
-//            model.addAttribute("updMessage", notification.getFormattedErrors());
-//            message=notification.getFormattedErrors();
-//        }
-//        return Gr
+//        List<Consultation> consultationList=consultationService.findByDate(LocalDate.now());
+//
+//        String message = consultationList.get(0).getPatient().getName()+" "+consultationList.get(0).getDate();
+//        return new Greeting(message);
 //    }
+
 
 }

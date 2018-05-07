@@ -36,6 +36,15 @@ function sendName() {
     stompClient.send("/app/hi", {}, JSON.stringify({'name': ''}));
 }
 
+function sendName2() {
+    var fields = $("#idDoc").val();
+    var value= fields;
+    fields = $("#idPat").val();
+    var value2=fields;
+    var date = $("#cday").val();
+    stompClient.send("/app/hi", {}, JSON.stringify({'Doctor ID ': value, 'Patient ID: ':value2, 'Date: ':date}));
+}
+
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
@@ -47,5 +56,14 @@ $(function () {
     $( "#connect" ).click(function() { connect(); });
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
+    $( "#addCons" ).click(function() { sendName2();
+            //console.log("entered method")
+            var fields = $("#idPat").val();
+            var value= fields;
+            fields = $("#idDoc").val();
+            var value2=fields;
+            fields= $("#cday").val();
+            window.location.href="/makeAppointment?idDoc="+value2+"&idPat="+value+"&cday="+fields;
+            });
 });
 
