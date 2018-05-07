@@ -17,7 +17,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-//    /***************************USER *************************************/
+    //    /***************************USER *************************************/
 //
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public String showUser() {
@@ -70,7 +70,6 @@ public class AdminController {
     public String logout() {
         return "redirect:/login";
     }
-
 
 
 }

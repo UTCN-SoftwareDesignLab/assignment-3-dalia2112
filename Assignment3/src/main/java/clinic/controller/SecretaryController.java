@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.swing.*;
 import java.util.List;
 
 
@@ -38,7 +39,11 @@ public class SecretaryController {
     @RequestMapping(value = "/secretaryOp", params = "addP", method = RequestMethod.POST)
     public String addPatient(Model model, @RequestParam String name, @RequestParam long icn, @RequestParam long pnc, @RequestParam String bday, @RequestParam String addr) {
 
+
+        System.out.println(name + " " + icn + " " + pnc + " " + bday + " " + addr);
         Notification<Boolean> notification = patientService.addPatient(name, icn, pnc, bday, addr);
+//        System.out.println(notification.getFormattedErrors());
+//        JOptionPane.showMessageDialog(null,notification.getFormattedErrors());
         if (notification.getResult()) {
             model.addAttribute("updUSucc", true);
             model.addAttribute("updMessage2", "Patient added successfully!");
@@ -142,10 +147,10 @@ public class SecretaryController {
 
     @MessageMapping("/hi")
     @SendTo("/topic/greetings")
-    @RequestMapping(value = "/secretaryOp",method = RequestMethod.POST)
+    @RequestMapping(value = "/secretaryOp", method = RequestMethod.POST)
     public Greeting checkInPatient(String message) {
-        message=message.replace("{","");
-        message=message.replace("}","");
+        message = message.replace("{", "");
+        message = message.replace("}", "");
         return new Greeting(message);
     }
 

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @SpringBootApplication
 @EntityScan("clinic.model")
 @EnableJpaRepositories({"clinic.repository"})
-@ComponentScan({"clinic.model", "clinic.repository","clinic.service.user","clinic.service.patient","clinic.service.consultation","clinic.controller","clinic.config"})
+@ComponentScan({"clinic.model", "clinic.repository", "clinic.service.user", "clinic.service.patient", "clinic.service.consultation", "clinic.controller", "clinic.config"})
 public class Application {
 
     public static void main(String[] args) {

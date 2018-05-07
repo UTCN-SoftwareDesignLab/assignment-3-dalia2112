@@ -20,7 +20,7 @@ public class PatientValidator {
 
     public PatientValidator(Patient patient) {
         this.patient = patient;
-        errors=new ArrayList<>();
+        errors = new ArrayList<>();
     }
 
     public boolean validate() {
@@ -34,21 +34,21 @@ public class PatientValidator {
         return errors;
     }
 
-    private void validate_IdCardNr(long icn){
-        if(String.valueOf(icn).length()!=ID_CARD_NR_LENGTH)
+    private void validate_IdCardNr(long icn) {
+        if (String.valueOf(icn).length() != ID_CARD_NR_LENGTH)
             errors.add("Id card nr length must be 8!");
     }
 
-    private void validate_PersNumCode(long pnc){
-        String pncString=String.valueOf(pnc);
-        if(pncString.length()!=PERS_NUM_CODE_LENGTH)
+    private void validate_PersNumCode(long pnc) {
+        String pncString = String.valueOf(pnc);
+        if (pncString.length() != PERS_NUM_CODE_LENGTH)
             errors.add("Pers num code length must be 8!");
-        if(!pncString.substring(0,1).equalsIgnoreCase(PERS_NUM_CODE_START1) && !pncString.substring(0,1).equalsIgnoreCase(PERS_NUM_CODE_START2))
+        if (!pncString.substring(0, 1).equalsIgnoreCase(PERS_NUM_CODE_START1) && !pncString.substring(0, 1).equalsIgnoreCase(PERS_NUM_CODE_START2))
             errors.add("Pers num code must start with either 1 or 2!");
     }
 
-    private void validate_Birthday(LocalDate bDay){
-        if(LocalDate.now().getYear()-bDay.getYear()<MIN_AGE)
+    private void validate_Birthday(LocalDate bDay) {
+        if (LocalDate.now().getYear() - bDay.getYear() < MIN_AGE)
             errors.add("Patient too young!");
     }
 

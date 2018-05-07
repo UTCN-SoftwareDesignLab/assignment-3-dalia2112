@@ -7,6 +7,7 @@ import clinic.model.validation.Notification;
 import clinic.model.validation.UserValidator;
 import clinic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
 
     public Notification<Boolean> registerUser(String username, String password, String role) {
-//        BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
         User user = new UserBuilder()
                 .setName(username)
                 .setPassword(password)
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
             userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.setResult(Boolean.FALSE);
         } else {
-            user.setPassword(encodePassword(password));
+            user.setPassword(passEncoder.encode(password));
             userRegisterNotification.setResult(true);
             userRepository.save(user);
         }
@@ -81,8 +82,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public Notification<Boolean> login(String username, String password) {
-//        BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
-        User user = userRepository.findByNameAndPassword(username, encodePassword(password));
+        BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+        User user = userRepository.findByNameAndPassword(username, passEncoder.encode(password));
         Notification<Boolean> userLoginNotification = new Notification<>();
         if (user == null) {
             userLoginNotification.addError("USER does not exist!");
@@ -114,10 +115,10 @@ public class UserServiceImpl implements UserService {
             notification.setResult(false);
             return notification;
         }
-//        BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder passEncoder = new BCryptPasswordEncoder();
         User user = (User) userRepository.findById(id);
         user.setName(name);
-        user.setPassword(encodePassword(password));
+        user.setPassword(passEncoder.encode(password));
         user.setRole(role);
         userRepository.save(user);
         notification.setResult(true);
@@ -132,21 +133,21 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByName(username);
     }
 
-    public static String encodePassword(String password) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            StringBuilder hexString = new StringBuilder();
-
-            for (int i = 0; i < hash.length; i++) {
-                String hex = Integer.toHexString(0xff & hash[i]);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString();
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+//    public static String encodePassword(String password) {
+//        try {
+//            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//            byte[] hash = digest.digest(password.getBytes("UTF-8"));
+//            StringBuilder hexString = new StringBuilder();
+//
+//            for (int i = 0; i < hash.length; i++) {
+//                String hex = Integer.toHexString(0xff & hash[i]);
+//                if (hex.length() == 1) hexString.append('0');
+//                hexString.append(hex);
+//            }
+//
+//            return hexString.toString();
+//        } catch (Exception ex) {
+//            throw new RuntimeException(ex);
+//        }
+//    }
 }

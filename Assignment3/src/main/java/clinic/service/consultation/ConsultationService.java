@@ -26,7 +26,7 @@ public interface ConsultationService {
 
     Notification<Boolean> deleteConsultation(long id);
 
-    Notification<Boolean> addDetails(long id,String details);
+    Notification<Boolean> addDetails(long id, String details);
 
     Notification<String> checkInPatient(long id);
 

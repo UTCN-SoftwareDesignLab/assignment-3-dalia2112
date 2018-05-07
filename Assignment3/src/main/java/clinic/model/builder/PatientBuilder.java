@@ -10,40 +10,40 @@ public class PatientBuilder {
     private Patient patient;
 
     public PatientBuilder() {
-        patient=new Patient();
+        patient = new Patient();
     }
 
-    public PatientBuilder setId(long id){
+    public PatientBuilder setId(long id) {
         patient.setId(id);
         return this;
     }
 
-    public PatientBuilder setName(String name){
+    public PatientBuilder setName(String name) {
         patient.setName(name);
         return this;
     }
 
-    public PatientBuilder setId_card_nr(long id_card_nr){
+    public PatientBuilder setId_card_nr(long id_card_nr) {
         patient.setId_card_nr(id_card_nr);
         return this;
     }
 
-    public PatientBuilder setPers_num_code(long pnc){
+    public PatientBuilder setPers_num_code(long pnc) {
         patient.setPers_num_code(pnc);
         return this;
     }
 
-    public PatientBuilder setBirthday(LocalDate date){
+    public PatientBuilder setBirthday(LocalDate date) {
         patient.setBirthday(date);
         return this;
     }
 
-    public PatientBuilder setAddress(String address){
+    public PatientBuilder setAddress(String address) {
         patient.setAddress(address);
         return this;
     }
 
-    public Patient build(){
+    public Patient build() {
         return patient;
     }
 }

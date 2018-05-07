@@ -68,6 +68,6 @@ public class Patient {
 
     @Override
     public String toString() {
-        return id+" "+name+" "+" "+id_card_nr+" "+pers_num_code+" "+birthday+" "+address;
+        return id + " " + name + " " + " " + id_card_nr + " " + pers_num_code + " " + birthday + " " + address;
     }
 }

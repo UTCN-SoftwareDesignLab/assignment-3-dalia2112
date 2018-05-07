@@ -154,28 +154,28 @@ public class ConsultationServiceImpl implements ConsultationService {
         return notification;
     }
 
-    public Notification<String> checkInPatient(long id){
-        Notification<String> notification=new Notification<>();
+    public Notification<String> checkInPatient(long id) {
+        Notification<String> notification = new Notification<>();
         if (id < 0) {
             notification.addError("Id must be positive!");
             notification.setResult("");
             return notification;
         }
-        if(patientRepository.findById(id)==null){
+        if (patientRepository.findById(id) == null) {
             notification.addError("Id must be positive!");
             notification.setResult("");
             return notification;
         }
-        Patient patient=patientRepository.findById(id);
-        List<Consultation> consultations=consultationRepository.findByDate(LocalDate.now());
-        if(consultations==null){
+        Patient patient = patientRepository.findById(id);
+        List<Consultation> consultations = consultationRepository.findByDate(LocalDate.now());
+        if (consultations == null) {
             notification.addError("No consultations today!");
             notification.setResult("");
             return notification;
         }
-        for(Consultation consultation:consultations){
-            if(consultation.getPatient().getId()==id){
-                notification.setResult("Patient ("+id+") "+patient.getName()+" has an consultation today!");
+        for (Consultation consultation : consultations) {
+            if (consultation.getPatient().getId() == id) {
+                notification.setResult("Patient (" + id + ") " + patient.getName() + " has an consultation today!");
                 return notification;
             }
         }
@@ -184,11 +184,11 @@ public class ConsultationServiceImpl implements ConsultationService {
         return notification;
     }
 
-    public List<Patient> checkedInPatients(){
-        List<Patient> patients=patientRepository.findAll();
-        List<Patient> checkedPatients=new ArrayList<>();
-        for(Patient patient:patients){
-            if(!checkInPatient(patient.getId()).hasErrors())
+    public List<Patient> checkedInPatients() {
+        List<Patient> patients = patientRepository.findAll();
+        List<Patient> checkedPatients = new ArrayList<>();
+        for (Patient patient : patients) {
+            if (!checkInPatient(patient.getId()).hasErrors())
                 checkedPatients.add(patient);
         }
         return checkedPatients;

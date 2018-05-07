@@ -27,7 +27,7 @@ public class DoctorController {
     @RequestMapping(value = "/doctorOp", params = "addDet", method = RequestMethod.POST)
     public String addConsultDetails(Model model, @RequestParam long id, @RequestParam String details) {
 
-        Notification<Boolean> notification=consultationService.addDetails(id, details);
+        Notification<Boolean> notification = consultationService.addDetails(id, details);
         if (notification.getResult()) {
             model.addAttribute("detSucc", true);
             model.addAttribute("detMsg2", "Details added successfully!");
